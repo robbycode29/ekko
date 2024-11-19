@@ -23,6 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Access the environment variables
 COHERE_TOKEN = os.getenv('COHERE_TOKEN')
+PINECONE_TOKEN = os.getenv('PINECONE_TOKEN')
+PINECONE_INDEX = os.getenv('PINECONE_INDEX')
 
 
 # Quick-start development settings - unsuitable for production
