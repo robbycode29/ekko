@@ -25,6 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 COHERE_TOKEN = os.getenv('COHERE_TOKEN')
 PINECONE_TOKEN = os.getenv('PINECONE_TOKEN')
 PINECONE_INDEX = os.getenv('PINECONE_INDEX')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 ## Database vars
 POSTGRES_DB = os.getenv('POSTGRES_DB')
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'core',
 ]
 
