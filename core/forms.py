@@ -2,6 +2,6 @@ from django import forms
 from .models import ExcelFile
 
 class ExcelFileForm(forms.ModelForm):
-    class Meta:
-        model = ExcelFile
-        fields = ['file', 'offset', 'limit']
+    file = forms.FileField()
+    offset = forms.IntegerField(initial=0)
+    limit = forms.IntegerField(initial=1000)
