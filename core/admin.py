@@ -44,11 +44,11 @@ class ExcelFileAdmin(admin.ModelAdmin):
         for embedding in embeddings:
             vectors = pinecone.upsert([embedding])
             Product.objects.create(
-                pinecone_id=vectors[0]['id'],
-                title=df.iloc[embeddings.index(embedding)]['title'],
-                img_url=df.iloc[embeddings.index(embedding)]['imgUrl'],
-                product_url=df.iloc[embeddings.index(embedding)]['productURL'],
-                stars=df.iloc[embeddings.index(embedding)]['stars'],
-                reviews=df.iloc[embeddings.index(embedding)]['reviews'],
-                price=df.iloc[embeddings.index(embedding)]['price']
+                pinecone_id=vectors[0].get('id'),
+                title=df.iloc[embeddings.index(embedding)].get('title', ''),
+                img_url=df.iloc[embeddings.index(embedding)].get('imgURL', ''),
+                product_url=df.iloc[embeddings.index(embedding)].get('productURL', ''),
+                stars=df.iloc[embeddings.index(embedding)].get('stars', 0),
+                reviews=df.iloc[embeddings.index(embedding)].get('reviews', 0),
+                price=df.iloc[embeddings.index(embedding)].get('price', 0)
             )
