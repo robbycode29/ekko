@@ -46,7 +46,7 @@ class ExcelFileAdmin(admin.ModelAdmin):
             Product.objects.create(
                 pinecone_id=vectors[0].get('id'),
                 title=df.iloc[embeddings.index(embedding)].get('title', ''),
-                img_url=df.iloc[embeddings.index(embedding)].get('imgURL', ''),
+                img_url=df.iloc[embeddings.index(embedding)].get('imgUrl', ''),
                 product_url=df.iloc[embeddings.index(embedding)].get('productURL', ''),
                 stars=df.iloc[embeddings.index(embedding)].get('stars', 0),
                 reviews=df.iloc[embeddings.index(embedding)].get('reviews', 0),
