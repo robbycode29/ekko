@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import ExcelFile
 from .forms import ExcelFileForm
 import pandas as pd
-import os
+from io import BytesIO
 
 from .cohere import Cohere
 from .pinecone import PineconeInterface
@@ -17,16 +17,12 @@ class ProductAdmin(admin.ModelAdmin):
 class ExcelFileAdmin(admin.ModelAdmin):
     form = ExcelFileForm
 
-    def delete_queryset(self, request, queryset):
-        for obj in queryset:
-            if obj.file and os.path.isfile(obj.file.path):
-                os.remove(obj.file.path)
-        queryset.delete()
-
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         # Process the uploaded file
-        df = pd.read_csv(obj.file.path)
+        file = form.cleaned_data['file']
+        file.seek(0)
+        df = pd.read_csv(BytesIO(file.read()))
 
         # Take sample of the data
         offset = obj.offset
