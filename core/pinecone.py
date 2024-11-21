@@ -3,6 +3,7 @@ from bot.settings import PINECONE_TOKEN, PINECONE_INDEX
 
 from typing import List
 
+import numpy as np
 import uuid
 
 
@@ -20,7 +21,11 @@ class PineconeInterface:
         index.upsert(data)
         return data
 
-    def query(self, vector: List[float], top_k: int = 5):
+    def query(self, vectors: List[List[float]], top_k: int = 5):
         index = self._connect_to_index()
-        results = index.query(queries=[vector], top_k=top_k)
-        return results[0].matches
+        # Ensure each vector is a list of floats
+        vectors = [[float(v) for v in vector] for vector in vectors]
+        # Compute the mean vector
+        mean_vector = np.mean(vectors, axis=0).tolist()
+        results = index.query(vector=[mean_vector], top_k=top_k)
+        return results

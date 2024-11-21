@@ -9,10 +9,10 @@ class ExcelFile(models.Model):
 
 
 class Product(models.Model):
-    pinecone_id = models.CharField(max_length=255, null=True, blank=True)
-    title = models.CharField(max_length=255, null=True, blank=True)
-    img_url = models.CharField(max_length=255, null=True, blank=True)
-    product_url = models.CharField(max_length=255, null=True, blank=True)
+    pinecone_id = models.CharField(null=True, blank=True)
+    title = models.CharField(null=True, blank=True)
+    img_url = models.CharField(null=True, blank=True)
+    product_url = models.CharField(null=True, blank=True)
     stars = models.FloatField()
     reviews = models.IntegerField()
     price = models.FloatField()
