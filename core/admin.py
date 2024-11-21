@@ -25,30 +25,38 @@ class ExcelFileAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        # Process the uploaded file
-        df = pd.read_csv(obj.file.path)
 
-        # Take sample of the data
-        offset = obj.offset
-        limit = obj.limit
-        df = df.iloc[offset:offset + limit]
+        file_path = obj.file.path
 
-        texts = df['title'].tolist()
+        try:
+            # Process the uploaded file
+            df = pd.read_csv(file_path)
 
-        # Get embeddings
-        cohere = Cohere()
-        embeddings = cohere.embed(texts)
+            # Take sample of the data
+            offset = obj.offset
+            limit = obj.limit
+            df = df.iloc[offset:offset + limit]
 
-        # Save embeddings to Pinecone and DB
-        pinecone = PineconeInterface()
-        for embedding in embeddings:
-            vectors = pinecone.upsert([embedding])
-            Product.objects.create(
-                pinecone_id=vectors[0].get('id'),
-                title=df.iloc[embeddings.index(embedding)].get('title', ''),
-                img_url=df.iloc[embeddings.index(embedding)].get('imgUrl', ''),
-                product_url=df.iloc[embeddings.index(embedding)].get('productURL', ''),
-                stars=df.iloc[embeddings.index(embedding)].get('stars', 0),
-                reviews=df.iloc[embeddings.index(embedding)].get('reviews', 0),
-                price=df.iloc[embeddings.index(embedding)].get('price', 0)
-            )
+            texts = df['title'].tolist()
+
+            # Get embeddings
+            cohere = Cohere()
+            embeddings = cohere.embed(texts)
+
+            # Save embeddings to Pinecone and DB
+            pinecone = PineconeInterface()
+            for embedding in embeddings:
+                vectors = pinecone.upsert([embedding])
+                Product.objects.create(
+                    pinecone_id=vectors[0].get('id'),
+                    title=df.iloc[embeddings.index(embedding)].get('title', ''),
+                    img_url=df.iloc[embeddings.index(embedding)].get('imgUrl', ''),
+                    product_url=df.iloc[embeddings.index(embedding)].get('productURL', ''),
+                    stars=df.iloc[embeddings.index(embedding)].get('stars', 0),
+                    reviews=df.iloc[embeddings.index(embedding)].get('reviews', 0),
+                    price=df.iloc[embeddings.index(embedding)].get('price', 0)
+                )
+        finally:
+            # Ensure the file is closed after processing
+            if os.path.isfile(file_path):
+                os.remove(file_path)
