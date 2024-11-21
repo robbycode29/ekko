@@ -1,1 +1,1 @@
-web: gunicorn bot.wsgi
+web: gunicorn bot.wsgi --timeout 0
