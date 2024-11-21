@@ -18,6 +18,7 @@ class PineconeInterface:
         index = self._connect_to_index()
         data = [{"id": str(uuid.uuid4()), "values": vector} for vector in vectors]
         index.upsert(data)
+        return data
 
     def query(self, vector: List[float], top_k: int = 5):
         index = self._connect_to_index()
