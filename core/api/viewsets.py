@@ -34,7 +34,8 @@ class ProductSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
         # Perform similarity search
         pinecone = PineconeInterface()
-        similar_products = pinecone.query(query_embedding)
+        limit = request.data.get('limit', 10)
+        similar_products = pinecone.query(query_embedding, top_k=limit)
 
         # Sort matches by score in descending order
         sorted_matches = sorted(similar_products.get('matches', []), key=lambda x: x['score'], reverse=True)
