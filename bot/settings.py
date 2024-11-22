@@ -76,6 +76,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
+    "https://ekko-chat.vercel.app/",
 ]
 
 ROOT_URLCONF = 'bot.urls'
