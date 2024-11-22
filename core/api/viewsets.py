@@ -49,7 +49,7 @@ class ProductSearchViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         product_details = "\n".join([f"Title: {product.title}, Price: {product.price}, Stars: {product.stars}, Reviews: {product.reviews}" for product in products])
 
         # Get OpenAI response with product details
-        openai_prompt = f"User query: {query}\n\nSimilar products:\n{product_details}\n\nProvide a response to the user including these product details."
+        openai_prompt = f"Instructions: You are an Amazon shopping assistant. User query: {query}\n\nSimilar products:\n{product_details}\n\nProvide a response to the user including these product details."
         openai_response = openai_client.get_response(openai_prompt)
 
         return response.Response({
